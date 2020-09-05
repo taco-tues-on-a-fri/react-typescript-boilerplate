@@ -1,0 +1,20 @@
+{
+  "name": "react-typescript-boilerplate",
+  "version": "1.0.0",
+  "description": "React Typescript Boilerplate",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taco-tues-on-a-fri/react-typescript-boilerplate.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react-dom": "^16.13.1",
+    "react": "^16.13.1"
+  },
+  "devDependencies": {}
+}
