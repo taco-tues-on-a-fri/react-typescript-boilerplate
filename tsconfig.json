@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+    "outDir": "dist",
 		"baseUrl": "./",
 		"paths": {
 			"@src/*": ["./src/*"],
@@ -19,8 +20,8 @@
 		"importHelpers": true,
 		"noEmitHelpers": true,
 		"jsx": "react",
-		"lib": ["dom", "esNext"],
-		"target": "es5",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"target": "es6",
 		"module": "esNext",
 		"moduleResolution": "node",
 		"noEmit": false,

@@ -1,147 +1,202 @@
 const path = require('path')
+const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-const resolve = path.resolve.bind(__dirname)
+const isDevelopment = process.env.NODE_ENV !== 'production'
 
-const PATH = {
-	root: resolve('./'),
-	dist: resolve('./dist'),
-	src: resolve('./src'),
-	assets: resolve('./src/assets'),
-	utilities: resolve('./src/utilities'),
-	components: resolve('./src/components'),
-	nodeModules: resolve('./node_modules')
-}
+module.exports = {
+  mode: isDevelopment ? 'development' : 'production',
+  entry: {
+    // 		entry: ['./src/index.tsx'],
+    main: './src/index.tsx',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        include: path.join(__dirname, 'src'),
+        use: [
+          isDevelopment && {
+            loader: 'babel-loader',
+            options: { plugins: ['react-refresh/babel'] },
+          },
+          'ts-loader',
+        ].filter(Boolean),
+      },
+    ],
+  },
+  plugins: [
+    isDevelopment && new ReactRefreshPlugin(),
+    new HtmlWebpackPlugin({
+      filename: './index.html',
+      template: './src/index.html',
+    }),
+  ].filter(Boolean),
+  resolve: {
+    extensions: ['.js', '.ts', '.tsx'],
+  },
+};
 
-const tsConfig = {
-	test: /\.tsx?$/,
-	loaders: [
-		'react-hot-loader/webpack',
-		{
-			loader: 'ts-loader',
-			options: {
-				transpileOnly: true,
-				compilerOptions: {
-					sourceMap: true,
-					target: 'es5',
-					isolatedModules: true,
-					noEmitOnError: false
-				}
-			}
-		}
-	],
-	exclude: PATH.nodeModules,
-	include: PATH.src
-}
+//|------------------------------------------------------------------------v1
+// const resolve = path.resolve.bind(__dirname)
 
-const htmlConfig = {
-	test: /\.html$/,
-	use: [
-		{
-			loader: 'html-loader',
-			options: {
-				minimize: true
-			}
-		}
-	]
-}
+// const PATH = {
+// 	root: resolve('./'),
+// 	dist: resolve('./dist'),
+// 	src: resolve('./src'),
+// 	assets: resolve('./src/assets'),
+// 	utilities: resolve('./src/utilities'),
+// 	components: resolve('./src/components'),
+// 	nodeModules: resolve('./node_modules')
+// }
 
-const cssConfig = {
-	test: /\.css$/,
-	use: [
-		'css-hot-loader',
-    'css-loader',
-    'style-loader'
-	]
-}
+// const tsConfig = {
+// 	test: /\.tsx?$/,
+// 	loaders: [
+// 		'react-hot-loader/webpack',
+// 		{
+// 			loader: 'ts-loader',
+// 			options: {
+// 				transpileOnly: true,
+// 				compilerOptions: {
+// 					sourceMap: true,
+// 					target: 'es5',
+// 					isolatedModules: true,
+// 					noEmitOnError: false
+// 				}
+// 			}
+// 		}
+// 	],
+// 	exclude: PATH.nodeModules,
+// 	include: PATH.src
+// }
 
-module.exports = (env = {}) => {
-	const isDev = env.dev;
+// const fastRefreshConfig = {
+//   test: /\.[jt]sx?$/,
+//   exclude: /node_modules/,
+//   use: [
+//     {
+//       loader: require.resolve('babel-loader'),
+//       options: {
+//         plugins: [
+//           isDevelopment && require.resolve('react-refresh/babel'),
+//         ].filter(Boolean),
+//       },
+//     },
+//   ],
+// }
 
-	return {
-		entry: ['./src/index.tsx'],
-		output: {
-			path: PATH.dist,
-			filename: isDev ? '[name].js' : '[name].[chunkhash].bundle.js',
-			sourceMapFilename: isDev ? '[name].bundle.map' : '[name].[chunkhash].bundle.map',
-			chunkFilename: isDev ? '[name].chunk.js' : '[name].[chunkhash].chunk.js',
-			publicPath: '/'
-		},
-		module: {
-			rules: [tsConfig, htmlConfig, cssConfig ]
-		},
-		resolve: {
-			alias: {
-				'@src': PATH.src,
-				'@root': PATH.root,
-				'@assets': PATH.assets,
-				'@utilities': PATH.utilities,
-				'@components': PATH.components,
-				'react-dom': '@hot-loader/react-dom'
-			},
-			extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
-			modules: ['src', 'node_modules']
-		},
-		plugins: [
-			new HtmlWebpackPlugin({
-				template: './src/index.html',
-				filename: './index.html',
-				inject: true,
-				...(isDev
-					? {}
-					: {
-							minify: {
-								removeComments: true,
-								collapseWhitespace: true,
-								removeRedundantAttributes: true,
-								useShortDoctype: true,
-								removeEmptyAttributes: true,
-								removeStyleLinkTypeAttributes: true,
-								keepClosingSlash: true,
-								minifyJS: true,
-								minifyCSS: true,
-								minifyURLs: true
-							}
-          })
-			}),
-			new webpack.DefinePlugin({
-				'process.env': {
-					NODE_ENV: JSON.stringify(isDev ? 'development' : 'production')
-				}
-			}),
-			new CopyWebpackPlugin({
-				// @ts-ignore
-				patterns: [
-					{
-						from: 'src/assets/',
-						to: 'assets/'
-					}
-				]
-			}),
-			new MiniCssExtractPlugin({
-				filename: isDev ? '[name].css' : '[name].[hash].css',
-				chunkFilename: isDev ? '[id].css' : '[id].[hash].css'
-			})
-		],
-		cache: true,
-		bail: false,
-		devtool: isDev ? 'eval-source-map' : false,
-		devServer: {
-			hot: true,
-			noInfo: true,
-			contentBase: './dist',
-			historyApiFallback: true
-		},
-		stats: 'errors-only',
-		performance: {
-			hints: false
-		}
-	}
-}
+// const htmlConfig = {
+// 	test: /\.html$/,
+// 	use: [
+// 		{
+// 			loader: 'html-loader',
+// 			options: {
+// 				minimize: true
+// 			}
+// 		}
+// 	]
+// }
 
+// const cssConfig = {
+// 	test: /\.css$/,
+// 	use: [
+// 		'css-hot-loader',
+//     'css-loader',
+//     'style-loader'
+// 	]
+// }
+
+// module.exports = (env = {}) => {
+//   // const isDev = env.dev;
+//   mode: isDevelopment ? 'development' : 'production',
+
+// 	return {
+// 		entry: ['./src/index.tsx'],
+// 		output: {
+// 			path: PATH.dist,
+// 			filename: isDev ? '[name].js' : '[name].[chunkhash].bundle.js',
+// 			sourceMapFilename: isDev ? '[name].bundle.map' : '[name].[chunkhash].bundle.map',
+// 			chunkFilename: isDev ? '[name].chunk.js' : '[name].[chunkhash].chunk.js',
+// 			publicPath: '/'
+// 		},
+// 		module: {
+// 			rules: [tsConfig, fastRefreshConfig, htmlConfig, cssConfig ]
+// 		},
+// 		resolve: {
+// 			alias: {
+// 				'@src': PATH.src,
+// 				'@root': PATH.root,
+// 				'@assets': PATH.assets,
+// 				'@utilities': PATH.utilities,
+// 				'@components': PATH.components,
+// 				'react-dom': '@hot-loader/react-dom'
+// 			},
+// 			extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+// 			modules: ['src', 'node_modules']
+// 		},
+// 		plugins: [
+// 			new HtmlWebpackPlugin({
+// 				template: './src/index.html',
+// 				filename: './index.html',
+// 				inject: true,
+// 				...(isDev
+// 					? {}
+// 					: {
+// 							minify: {
+// 								removeComments: true,
+// 								collapseWhitespace: true,
+// 								removeRedundantAttributes: true,
+// 								useShortDoctype: true,
+// 								removeEmptyAttributes: true,
+// 								removeStyleLinkTypeAttributes: true,
+// 								keepClosingSlash: true,
+// 								minifyJS: true,
+// 								minifyCSS: true,
+// 								minifyURLs: true
+// 							}
+//           })
+// 			}),
+// 			new webpack.DefinePlugin({
+// 				'process.env': {
+// 					NODE_ENV: JSON.stringify(isDev ? 'development' : 'production')
+// 				}
+// 			}),
+// 			new CopyWebpackPlugin({
+// 				// @ts-ignore
+// 				patterns: [
+// 					{
+// 						from: 'src/assets/',
+// 						to: 'assets/'
+// 					}
+// 				]
+// 			}),
+// 			new MiniCssExtractPlugin({
+// 				filename: isDev ? '[name].css' : '[name].[hash].css',
+// 				chunkFilename: isDev ? '[id].css' : '[id].[hash].css'
+// 			})
+// 		],
+// 		cache: true,
+// 		bail: false,
+// 		devtool: isDev ? 'eval-source-map' : false,
+// 		devServer: {
+// 			hot: true,
+// 			noInfo: true,
+// 			contentBase: './dist',
+// 			historyApiFallback: true
+// 		},
+// 		stats: 'errors-only',
+// 		performance: {
+// 			hints: false
+// 		}
+// 	}
+// }
+//|------------------------------------------------------------------------
+
+//|------------------------------------------------------------------------
 // module.exports = {
 //   entry: './src/App.tsx',
 //   output: {

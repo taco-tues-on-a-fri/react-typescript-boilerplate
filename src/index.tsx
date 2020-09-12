@@ -1,28 +1,46 @@
 import React from 'react'
 import { render } from 'react-dom'
 
-import { App } from './app'
+import App from './app'
 
-const node: HTMLElement | null = document.getElementById('app') || document.createElement('div')
+// const node: HTMLElement | null = document.getElementById('root') || document.createElement('div')
 
-const renderRoot = (app: JSX.Element): void => render(app, node)
+// const renderRoot = (Ap: JSX.Element): void => render(app, node)
 
-const router = (Application: any): JSX.Element => (
-  <Application />
-)
+// const router = (Application: any): JSX.Element => (
+  // <Application />
+// )
 
-renderRoot(router(App));
+// renderRoot(router(App));
 
-if (module.hot) {
-	module.hot.accept();
+render(<App />, document.getElementById('root'))
 
-	// eslint-disable-next-line
-	renderRoot(router(require('./app').App));
-}
+//|------------------------------------------------------------------------v1
+// import React from 'react'
+// import { render } from 'react-dom'
 
-if (process.env.NODE_ENV === 'production') {
-	install({
-		onUpdateReady: () => applyUpdate(),
-		onUpdated: () => window.location.reload()
-	});
-}
+// import { App } from './app'
+
+// const node: HTMLElement | null = document.getElementById('app') || document.createElement('div')
+
+// const renderRoot = (app: JSX.Element): void => render(app, node)
+
+// const router = (Application: any): JSX.Element => (
+//   <Application />
+// )
+
+// renderRoot(router(App));
+
+// if (module.hot) {
+// 	module.hot.accept();
+
+// 	// eslint-disable-next-line
+// 	renderRoot(router(require('./app').App));
+// }
+
+// if (process.env.NODE_ENV === 'production') {
+// 	install({
+// 		onUpdateReady: () => applyUpdate(),
+// 		onUpdated: () => window.location.reload()
+// 	});
+// }
