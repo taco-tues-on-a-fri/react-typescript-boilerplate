@@ -51,12 +51,31 @@ const cssConfig = {
     'css-loader',
 	]
 }
+const minifyConfig = {
+  removeComments: true,
+  collapseWhitespace: true,
+  removeRedundantAttributes: true,
+  useShortDoctype: true,
+  removeEmptyAttributes: true,
+  removeStyleLinkTypeAttributes: true,
+  keepClosingSlash: true,
+  minifyJS: true,
+  minifyCSS: true,
+  minifyURLs: true
+}
 
 module.exports = {
   mode: isDevelopment ? 'development' : 'production',
-  entry: {
-    // 		entry: ['./src/index.tsx'],
-    main: './src/index.tsx',
+  // entry: {
+  //   main: './src/index.tsx',
+  // },
+  entry: ['./src/index.tsx'],
+  output: {
+    path: PATH.dist,
+    filename: isDevelopment ? '[name].js' : '[name].[chunkhash].bundle.js',
+    sourceMapFilename: isDevelopment ? '[name].bundle.map' : '[name].[chunkhash].bundle.map',
+    chunkFilename: isDevelopment ? '[name].chunk.js' : '[name].[chunkhash].chunk.js',
+    publicPath: '/'
   },
   module: {
     rules: [tsConfig, htmlConfig, cssConfig],
@@ -66,10 +85,20 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: './index.html',
       template: './src/index.html',
+      inject: true,
+      ...(isDevelopment ? {} : { minify: minifyConfig })
     }),
   ].filter(Boolean),
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
+    alias: {
+      '@src': PATH.src,
+      '@root': PATH.root,
+      '@assets': PATH.assets,
+      '@utilities': PATH.utilities,
+      '@components': PATH.components,
+      },
+    modules: ['src', 'node_modules']
   },
 };
 
