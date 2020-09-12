@@ -88,6 +88,10 @@ module.exports = {
       inject: true,
       ...(isDevelopment ? {} : { minify: minifyConfig })
     }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(isDevelopment ? 'development' : 'production')
+      }
   ].filter(Boolean),
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
@@ -100,7 +104,8 @@ module.exports = {
       },
     modules: ['src', 'node_modules']
   },
-};
+  
+}
 
 //|------------------------------------------------------------------------v2
 
