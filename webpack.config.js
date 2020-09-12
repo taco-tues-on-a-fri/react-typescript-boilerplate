@@ -44,6 +44,14 @@ const htmlConfig = {
 	]
 }
 
+const cssConfig = {
+	test: /\.css$/,
+	use: [
+    'style-loader',
+    'css-loader',
+	]
+}
+
 module.exports = {
   mode: isDevelopment ? 'development' : 'production',
   entry: {
@@ -51,7 +59,7 @@ module.exports = {
     main: './src/index.tsx',
   },
   module: {
-    rules: [tsConfig, htmlConfig],
+    rules: [tsConfig, htmlConfig, cssConfig],
   },
   plugins: [
     isDevelopment && new ReactRefreshPlugin(),
@@ -71,14 +79,7 @@ module.exports = {
 
 
 
-// const cssConfig = {
-// 	test: /\.css$/,
-// 	use: [
-// 		'css-hot-loader',
-//     'css-loader',
-//     'style-loader'
-// 	]
-// }
+
 
 // module.exports = (env = {}) => {
 //   // const isDev = env.dev;

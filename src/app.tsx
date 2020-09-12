@@ -1,6 +1,6 @@
 import React, { FC, lazy } from 'react'
 
-const LazyComponent = lazy(() => import('./components/Lazy'))
+const LazyComponent = lazy(() => import('./components/Lazy/Lazy'))
 
 const App: FC = () => {
   return (
