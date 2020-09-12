@@ -42,10 +42,14 @@
 		"removeComments": false,
     "sourceMap": true,
     "typeRoots": ["./types"],
+    "types": ["node"],
     "esModuleInterop": true,
     "resolveJsonModule": true
 	},
 	"compileOnSave": false,
-	"include": ["src/**/*"],
+	"include": [
+    "src/**/*",
+    "./types"
+  ],
 	"exclude": ["node_modules"]
 }
