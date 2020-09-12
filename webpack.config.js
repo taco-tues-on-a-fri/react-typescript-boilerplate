@@ -32,6 +32,18 @@ const tsConfig = {
   ].filter(Boolean),
 }
 
+const htmlConfig = {
+	test: /\.html$/,
+	use: [
+		{
+			loader: 'html-loader',
+			options: {
+				minimize: true
+			}
+		}
+	]
+}
+
 module.exports = {
   mode: isDevelopment ? 'development' : 'production',
   entry: {
@@ -39,7 +51,7 @@ module.exports = {
     main: './src/index.tsx',
   },
   module: {
-    rules: [tsConfig],
+    rules: [tsConfig, htmlConfig],
   },
   plugins: [
     isDevelopment && new ReactRefreshPlugin(),
@@ -58,32 +70,6 @@ module.exports = {
 
 
 
-// const fastRefreshConfig = {
-//   test: /\.[jt]sx?$/,
-//   exclude: /node_modules/,
-//   use: [
-//     {
-//       loader: require.resolve('babel-loader'),
-//       options: {
-//         plugins: [
-//           isDevelopment && require.resolve('react-refresh/babel'),
-//         ].filter(Boolean),
-//       },
-//     },
-//   ],
-// }
-
-// const htmlConfig = {
-// 	test: /\.html$/,
-// 	use: [
-// 		{
-// 			loader: 'html-loader',
-// 			options: {
-// 				minimize: true
-// 			}
-// 		}
-// 	]
-// }
 
 // const cssConfig = {
 // 	test: /\.css$/,
