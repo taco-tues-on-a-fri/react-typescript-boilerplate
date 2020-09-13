@@ -51,6 +51,7 @@ const cssConfig = {
     'css-loader',
 	]
 }
+
 const minifyConfig = {
   removeComments: true,
   collapseWhitespace: true,
