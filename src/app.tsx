@@ -1,13 +1,15 @@
-import * as React from 'react';
-import { hot } from 'react-hot-loader/root';
+import React, { FC, lazy } from 'react'
 
-// import './app.scss';
+const LazyComponent = lazy(() => import('./components/Lazy/Lazy'))
 
-interface Props {
-	readonly component: React.ComponentType;
-	readonly [x: string]: any;
+const App: FC = () => {
+  return (
+    <div>
+      <React.Suspense fallback={<h1>Loading</h1>}>
+        <LazyComponent />
+      </React.Suspense>
+    </div>
+  )
 }
 
-export const App = hot(() => (
-    <div>🌮taco-tues-on-a-fri</div>
-))
+export default App
